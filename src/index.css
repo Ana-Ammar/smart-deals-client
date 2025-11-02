@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #632EE3;
+  --color-secondary: teal;
+}
+
+
+.bg-two-sides {
+  background-image: url('./assets/bg-hero-left.png'), url('./assets/bg-hero-right.png');
+  background-position: left, right;
+  background-repeat: no-repeat, no-repeat;
+  background-size: contain, contain;
+}
