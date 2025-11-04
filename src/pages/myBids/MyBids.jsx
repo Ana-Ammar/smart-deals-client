@@ -6,14 +6,35 @@ const MyBids = () => {
   const { user } = use(AuthContext);
   const [myBids, setMyBids] = useState([]);
 
-  useEffect(() => {
-    fetch(`http://localhost:5165/bids?email=${user.email}`)
+  
+  // Authorization using manually genarate token
+  // useEffect(() => {
+  //   fetch(`http://localhost:5165/bids?email=${user.email}`, {
+  //     headers: {
+  //       authorization: `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       const sortedData = data.sort((a, b) => b.bid_price - a.bid_price);
+  //       setMyBids(sortedData);
+  //     });
+  // }, [user]);
+
+
+  // Using Firebase
+    useEffect(() => {
+    fetch(`http://localhost:5165/bids?email=${user.email}`, {
+      headers: {
+        authorization: `Bearer ${user.accessToken}`
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         const sortedData = data.sort((a, b) => b.bid_price - a.bid_price);
         setMyBids(sortedData);
       });
-  }, [user.email]);
+  }, [user]);
 
   const handlDeleteBid = (_id) => {
     Swal.fire({

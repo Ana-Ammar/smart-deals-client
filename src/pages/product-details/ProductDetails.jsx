@@ -1,12 +1,14 @@
 import { Link, useLoaderData } from "react-router";
 import { FaArrowLeft } from "react-icons/fa";
 import Modal from "./Modal";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import BidsTable from "./BidsTable";
+import { AuthContext } from "../../provider/AuthContext";
 
 const ProductDetails = () => {
   const [bids, setBids] = useState([]);
   const product = useLoaderData();
+  const { user } = use(AuthContext);
 
   const {
     _id,
@@ -22,14 +24,18 @@ const ProductDetails = () => {
     location,
     email,
     status,
-    seller_contact
+    seller_contact,
   } = product;
 
   useEffect(() => {
-    fetch(`http://localhost:5165/products/bids/${_id}`)
+    fetch(`http://localhost:5165/products/bids/${_id}`, {
+      headers: {
+        authorization: `Bearer ${user.accessToken}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setBids(data));
-  }, [_id]);
+  }, [_id, user]);
 
   const handleModalOpen = () => {
     const modal = document.getElementById("my_modal_1");
@@ -105,9 +111,7 @@ const ProductDetails = () => {
                 <div className="w-12 h-12 bg-gray-300 rounded-full" />
                 <div>
                   <p className="font-semibold">{seller_name}</p>
-                  <p className="text-sm text-gray-500">
-                    {email}
-                  </p>
+                  <p className="text-sm text-gray-500">{email}</p>
                 </div>
               </div>
               <p>

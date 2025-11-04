@@ -32,6 +32,7 @@ const Register = () => {
           email: res.user.email,
           image: res.user.photoURL,
         };
+        
         // Add user data to database
         fetch("http://localhost:5165/users", {
           method: "POST",

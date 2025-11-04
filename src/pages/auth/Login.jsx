@@ -1,7 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useContext } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { AuthContext } from '../../provider/AuthContext';
 
 const Login = () => {
+    const { signInWithGoogle } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+   const handleSignInWithGoogle = () => {
+    signInWithGoogle()
+      .then((res) => {
+        console.log(res.user);
+        navigate(`${location.state ? location.state : "/"}`);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
     return (
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto mt-10">
       <div className="card-body">
@@ -26,7 +41,9 @@ const Login = () => {
         <div className="divider">or</div>
 
         {/* <!-- Google --> */}
-        <button class="btn bg-white text-black border-[#e5e5e5]">
+        <button 
+        onClick={handleSignInWithGoogle}
+        className="btn bg-white text-black border-[#e5e5e5]">
           <svg
             aria-label="Google logo"
             width="16"

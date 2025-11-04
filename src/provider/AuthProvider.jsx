@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 
-const googleProvider = new GoogleAuthProvider()
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,9 +22,9 @@ const AuthProvider = ({ children }) => {
   };
 
   const signInWithGoogle = () => {
-    setLoading(true)
-    return signInWithPopup(auth, googleProvider)
-  }
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
   const signInUser = (email, password) => {
     setLoading(true);
@@ -32,15 +32,30 @@ const AuthProvider = ({ children }) => {
   };
 
   const signOutUser = () => {
-    setLoading(true)
-    return signOut(auth)
-  }
+    setLoading(true);
+    return signOut(auth);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false)
-    })
+      // const loggedUser = { email: currentUser?.email };
+      // if (currentUser) {
+      //   fetch("http://localhost:5165/get-token", {
+      //     method: "POST",
+      //     headers: {
+      //       "content-type": "application/json",
+      //     },
+      //     body: JSON.stringify(loggedUser),
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => localStorage.setItem("token", data.token));
+      // } else {
+      //   localStorage.removeItem('token')
+      // }
+
+      setLoading(false);
+    });
     return () => {
       unsubscribe();
     };
