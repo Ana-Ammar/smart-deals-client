@@ -34,7 +34,7 @@ const Register = () => {
         };
         
         // Add user data to database
-        fetch("http://localhost:5165/users", {
+        fetch("https://smart-deals-server-beige.vercel.app/users", {
           method: "POST",
           headers: {
             "content-type": "application/json",

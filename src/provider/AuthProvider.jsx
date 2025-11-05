@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
       setUser(currentUser);
       // const loggedUser = { email: currentUser?.email };
       // if (currentUser) {
-      //   fetch("http://localhost:5165/get-token", {
+      //   fetch("https://smart-deals-server-beige.vercel.app/get-token", {
       //     method: "POST",
       //     headers: {
       //       "content-type": "application/json",

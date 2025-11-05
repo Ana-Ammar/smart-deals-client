@@ -1,15 +1,16 @@
 import React, { use, useEffect, useState } from "react";
 import { AuthContext } from "../../provider/AuthContext";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MyBids = () => {
   const { user } = use(AuthContext);
   const [myBids, setMyBids] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
-  
   // Authorization using manually genarate token
   // useEffect(() => {
-  //   fetch(`http://localhost:5165/bids?email=${user.email}`, {
+  //   fetch(`https://smart-deals-server-beige.vercel.app/bids?email=${user.email}`, {
   //     headers: {
   //       authorization: `Bearer ${localStorage.getItem('token')}`
   //     }
@@ -21,20 +22,26 @@ const MyBids = () => {
   //     });
   // }, [user]);
 
-
   // Using Firebase
-    useEffect(() => {
-    fetch(`http://localhost:5165/bids?email=${user.email}`, {
-      headers: {
-        authorization: `Bearer ${user.accessToken}`
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedData = data.sort((a, b) => b.bid_price - a.bid_price);
-        setMyBids(sortedData);
-      });
-  }, [user]);
+  //   useEffect(() => {
+  //   fetch(`https://smart-deals-server-beige.vercel.app/bids?email=${user.email}`, {
+  //     headers: {
+  //       authorization: `Bearer ${user.accessToken}`
+  //     }
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       const sortedData = data.sort((a, b) => b.bid_price - a.bid_price);
+  //       setMyBids(sortedData);
+  //     });
+  // }, [user]);
+
+  useEffect(() => {
+    axiosSecure.get(`/bids?email=${user.email}`).then((data) => {
+      const sortedData = data.data.sort((a, b) => b.bid_price - a.bid_price);
+      setMyBids(sortedData);
+    });
+  });
 
   const handlDeleteBid = (_id) => {
     Swal.fire({
@@ -47,12 +54,11 @@ const MyBids = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5165/bids/${_id}`, {
+        fetch(`https://smart-deals-server-beige.vercel.app/bids/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
           .then((data) => {
-
             if (data.deletedCount) {
               Swal.fire({
                 title: "Deleted!",

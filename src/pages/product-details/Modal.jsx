@@ -3,9 +3,11 @@ import { FaPaperPlane } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { AuthContext } from "../../provider/AuthContext";
 import Swal from "sweetalert2";
+import useAxios from "../../hooks/useAxios";
 
 const Modal = ({ product, setBids, bids }) => {
   const { user } = useContext(AuthContext);
+  const axiosInstance = useAxios();
 
   const id = product._id;
 
@@ -22,35 +24,27 @@ const Modal = ({ product, setBids, bids }) => {
       status: "pending",
     };
 
-    fetch("http://localhost:5165/bids", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newBid),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your work has been saved",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setBids([...bids, newBid]);
-          const modal = document.getElementById("my_modal_1")
-          modal.close()
-          e.target.reset()
-        }
-      });
+    axiosInstance.post("/bids", newBid).then((data) => {
+      if (data.data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setBids([...bids, newBid]);
+        const modal = document.getElementById("my_modal_1");
+        modal.close();
+        e.target.reset();
+      }
+    });
   };
 
   const handleCloseModal = () => {
-    const modal = document.getElementById("my_modal_1")
-    modal.close()
-  }
+    const modal = document.getElementById("my_modal_1");
+    modal.close();
+  };
   return (
     <>
       <dialog id="my_modal_1" className="modal">

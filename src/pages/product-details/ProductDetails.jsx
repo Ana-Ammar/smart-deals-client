@@ -1,14 +1,15 @@
 import { Link, useLoaderData } from "react-router";
 import { FaArrowLeft } from "react-icons/fa";
 import Modal from "./Modal";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BidsTable from "./BidsTable";
-import { AuthContext } from "../../provider/AuthContext";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const ProductDetails = () => {
   const [bids, setBids] = useState([]);
   const product = useLoaderData();
-  const { user } = use(AuthContext);
+  const axiosSecure = useAxiosSecure()
+
 
   const {
     _id,
@@ -28,14 +29,20 @@ const ProductDetails = () => {
   } = product;
 
   useEffect(() => {
-    fetch(`http://localhost:5165/products/bids/${_id}`, {
-      headers: {
-        authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setBids(data));
-  }, [_id, user]);
+    axiosSecure.get(`/products/bids/${_id}`)
+    .then(data => setBids(data.data))
+  }, [_id, axiosSecure]);
+
+
+  // useEffect(() => {
+  //   fetch(`https://smart-deals-server-beige.vercel.app/products/bids/${_id}`, {
+  //     headers: {
+  //       authorization: `Bearer ${user.accessToken}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => setBids(data));
+  // }, [_id, user]);
 
   const handleModalOpen = () => {
     const modal = document.getElementById("my_modal_1");

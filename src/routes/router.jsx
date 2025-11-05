@@ -8,6 +8,7 @@ import PrivateRouter from "../provider/PrivateRouter";
 import MyProducts from "../pages/myProducts/MyProducts";
 import MyBids from "../pages/myBids/MyBids";
 import ProductDetails from "../pages/product-details/ProductDetails";
+import CreateProduct from "../pages/createProduct/CreateProduct";
 
 export const router = createBrowserRouter([
   {
@@ -48,13 +49,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/product-details/:id",
-        loader: ({params}) => fetch(`http://localhost:5165/products/${params.id}`),
+        loader: ({params}) => fetch(`https://smart-deals-server-beige.vercel.app/products/${params.id}`),
         element: (
           <PrivateRouter>
             <ProductDetails />
           </PrivateRouter>
         ),
       },
+      {
+        path: "create-product",
+        element: <PrivateRouter>
+          <CreateProduct></CreateProduct>
+        </PrivateRouter>
+      }
     ],
   },
 ]);
