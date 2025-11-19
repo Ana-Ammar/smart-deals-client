@@ -6,7 +6,6 @@ import ProductCard from "./ProductCard";
 const LatestProduct = () => {
     const axiosInstance = useAxios()
     const [latestProducts, setLatestProducts] = useState([])
-    console.log(latestProducts)
     
     axiosInstance.get("/latest-product/")
     .then(data => {
